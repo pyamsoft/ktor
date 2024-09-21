@@ -46,10 +46,3 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.logback.classic)
 }
-
-kotlin {
-    jvmToolchain {
-        check(this is JavaToolchainSpec)
-        languageVersion.set(JavaLanguageVersion.of(8))
-    }
-}

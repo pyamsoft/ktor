@@ -67,7 +67,7 @@ extra["configuredVersion"] = when {
 println("The build version is ${extra["configuredVersion"]}")
 
 extra["globalM2"] = "$buildDir/m2"
-extra["publishLocal"] = project.hasProperty("publishLocal")
+extra["publishLocal"] = true
 
 val configuredVersion: String by extra
 
@@ -182,13 +182,6 @@ fun Project.setupJvmToolchain() {
     val jdk = when (project.name) {
         in jdk11Modules -> 11
         else -> 8
-    }
-
-    kotlin {
-        jvmToolchain {
-            check(this is JavaToolchainSpec)
-            languageVersion.set(JavaLanguageVersion.of(jdk))
-        }
     }
 }
 

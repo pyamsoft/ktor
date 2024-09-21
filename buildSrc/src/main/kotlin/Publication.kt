@@ -82,6 +82,7 @@ fun Project.configurePublication() {
         repositories {
             maven {
                 if (publishLocal) {
+                    println("Set globalM2 local: $globalM2")
                     setUrl(globalM2)
                 } else {
                     publishingUrl?.let { setUrl(it) }
