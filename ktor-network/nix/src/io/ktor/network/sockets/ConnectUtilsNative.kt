@@ -16,6 +16,14 @@ internal actual suspend fun connect(
     selector: SelectorManager,
     remoteAddress: SocketAddress,
     socketOptions: SocketOptions.TCPClientSocketOptions
+): Socket = connectWithConfiguration(selector, remoteAddress, socketOptions, {})
+
+@OptIn(UnsafeNumber::class)
+internal actual suspend fun connectWithConfiguration(
+    selector: SelectorManager,
+    remoteAddress: SocketAddress,
+    socketOptions: SocketOptions.TCPClientSocketOptions,
+    onBeforeConnect: suspend (Socket) -> Unit,
 ): Socket = memScoped {
     for (remote in remoteAddress.resolve()) {
         try {
@@ -48,6 +56,14 @@ internal actual fun bind(
     selector: SelectorManager,
     localAddress: SocketAddress?,
     socketOptions: SocketOptions.AcceptorOptions
+): ServerSocket = bindWithConfiguration(selector, localAddress, socketOptions, {})
+
+@OptIn(UnsafeNumber::class)
+internal actual fun bindWithConfiguration(
+    selector: SelectorManager,
+    localAddress: SocketAddress?,
+    socketOptions: SocketOptions.AcceptorOptions,
+    onBeforeBind: (ServerSocket) -> Unit,
 ): ServerSocket = memScoped {
     val address = localAddress?.address ?: getAnyLocalAddress()
     val descriptor = socket(address.family.convert(), SOCK_STREAM, 0).check()

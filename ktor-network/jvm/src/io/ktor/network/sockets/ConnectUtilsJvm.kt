@@ -13,11 +13,19 @@ internal actual suspend fun connect(
     selector: SelectorManager,
     remoteAddress: SocketAddress,
     socketOptions: SocketOptions.TCPClientSocketOptions
+): Socket = connectWithConfiguration(selector, remoteAddress, socketOptions, {})
+
+internal actual suspend fun connectWithConfiguration(
+    selector: SelectorManager,
+    remoteAddress: SocketAddress,
+    socketOptions: SocketOptions.TCPClientSocketOptions,
+    onBeforeConnect: suspend (Socket) -> Unit,
 ): Socket = selector.buildOrClose({ openSocketChannelFor(remoteAddress) }) {
     if (remoteAddress is InetSocketAddress) assignOptions(socketOptions)
     nonBlocking()
 
     SocketImpl(this, selector, socketOptions).apply {
+        onBeforeConnect(this)
         connect(remoteAddress.toJavaAddress())
     }
 }
@@ -26,11 +34,19 @@ internal actual fun bind(
     selector: SelectorManager,
     localAddress: SocketAddress?,
     socketOptions: SocketOptions.AcceptorOptions
+): ServerSocket = bindWithConfiguration(selector, localAddress, socketOptions, {})
+
+internal actual fun bindWithConfiguration(
+    selector: SelectorManager,
+    localAddress: SocketAddress?,
+    socketOptions: SocketOptions.AcceptorOptions,
+    onBeforeBind: (ServerSocket) -> Unit,
 ): ServerSocket = selector.buildOrClose({ openServerSocketChannelFor(localAddress) }) {
     if (localAddress is InetSocketAddress) assignOptions(socketOptions)
     nonBlocking()
 
     ServerSocketImpl(this, selector).apply {
+        onBeforeBind(this)
         if (java7NetworkApisAvailable) {
             channel.bind(localAddress?.toJavaAddress(), socketOptions.backlogSize)
         } else {
