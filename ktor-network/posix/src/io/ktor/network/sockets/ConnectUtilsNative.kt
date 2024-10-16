@@ -18,6 +18,14 @@ internal actual suspend fun connect(
     selector: SelectorManager,
     remoteAddress: SocketAddress,
     socketOptions: SocketOptions.TCPClientSocketOptions
+): Socket = connectWithConfiguration(selector, remoteAddress, socketOptions, {})
+
+@OptIn(UnsafeNumber::class, ExperimentalForeignApi::class)
+internal actual suspend fun connectWithConfiguration(
+    selector: SelectorManager,
+    remoteAddress: SocketAddress,
+    socketOptions: SocketOptions.TCPClientSocketOptions,
+    onBeforeConnect: suspend (Socket) -> Unit,
 ): Socket = memScoped {
     initSocketsIfNeeded()
 

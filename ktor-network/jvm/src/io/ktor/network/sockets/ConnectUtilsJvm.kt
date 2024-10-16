@@ -13,11 +13,19 @@ internal actual suspend fun connect(
     selector: SelectorManager,
     remoteAddress: SocketAddress,
     socketOptions: SocketOptions.TCPClientSocketOptions
+): Socket = connectWithConfiguration(selector, remoteAddress, socketOptions, {})
+
+internal actual suspend fun connectWithConfiguration(
+    selector: SelectorManager,
+    remoteAddress: SocketAddress,
+    socketOptions: SocketOptions.TCPClientSocketOptions,
+    onBeforeConnect: suspend (Socket) -> Unit,
 ): Socket = selector.buildOrClose({ openSocketChannelFor(remoteAddress) }) {
     if (remoteAddress is InetSocketAddress) assignOptions(socketOptions)
     nonBlocking()
 
     SocketImpl(this, selector, socketOptions).apply {
+        onBeforeConnect(this)
         connect(remoteAddress.toJavaAddress())
     }
 }

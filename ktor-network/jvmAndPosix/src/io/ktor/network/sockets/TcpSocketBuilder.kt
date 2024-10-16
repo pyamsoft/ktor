@@ -23,6 +23,16 @@ public class TcpSocketBuilder internal constructor(
     ): Socket = connect(InetSocketAddress(hostname, port), configure)
 
     /**
+     * Connect to [hostname] and [port].
+     */
+    public suspend fun connectWithConfiguration(
+        hostname: String,
+        port: Int,
+        configure: SocketOptions.TCPClientSocketOptions.() -> Unit = {},
+        onBeforeConnect: suspend (Socket) -> Unit = {}
+    ): Socket = connectWithConfiguration(InetSocketAddress(hostname, port), configure, onBeforeConnect)
+
+    /**
      * Bind server socket at [port] to listen to [hostname].
      */
     public suspend fun bind(
@@ -38,6 +48,15 @@ public class TcpSocketBuilder internal constructor(
         remoteAddress: SocketAddress,
         configure: SocketOptions.TCPClientSocketOptions.() -> Unit = {}
     ): Socket = connect(selector, remoteAddress, options.tcp().apply(configure))
+
+    /**
+     * Connect to [remoteAddress].
+     */
+    public suspend fun connectWithConfiguration(
+        remoteAddress: SocketAddress,
+        configure: SocketOptions.TCPClientSocketOptions.() -> Unit = {},
+        onBeforeConnect: suspend (Socket) -> Unit = {}
+    ): Socket = connectWithConfiguration(selector, remoteAddress, options.peer().tcp().apply(configure), onBeforeConnect)
 
     /**
      * Bind server socket to listen to [localAddress].
