@@ -20,7 +20,7 @@ extra["configuredVersion"] = when {
 println("The build version is ${extra["configuredVersion"]}")
 
 extra["globalM2"] = "${project.file("build")}/m2"
-extra["publishLocal"] = project.hasProperty("publishLocal")
+extra["publishLocal"] = true
 
 val configuredVersion: String by extra
 
@@ -132,7 +132,7 @@ configureDokka()
 
 fun Project.setupJvmToolchain() {
     kotlin {
-        jvmToolchain(project.requiredJdkVersion)
+        jvmToolchain(17)
     }
 }
 
