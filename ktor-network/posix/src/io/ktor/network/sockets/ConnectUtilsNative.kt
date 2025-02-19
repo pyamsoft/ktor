@@ -14,6 +14,14 @@ import platform.posix.*
 private const val DEFAULT_BACKLOG_SIZE = 50
 
 @OptIn(ExperimentalForeignApi::class)
+internal actual suspend fun tcpConnectWithConfiguration(
+    selector: SelectorManager,
+    remoteAddress: SocketAddress,
+    socketOptions: SocketOptions.TCPClientSocketOptions,
+    onBeforeConnect: suspend (Socket) -> Unit,
+): Socket = tcpConnect(selector, remoteAddress, socketOptions)
+
+@OptIn(ExperimentalForeignApi::class)
 internal actual suspend fun tcpConnect(
     selector: SelectorManager,
     remoteAddress: SocketAddress,
