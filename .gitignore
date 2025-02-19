@@ -42,3 +42,4 @@ gradle-user-home
 .kotlin
 
 scan-journal.log
+*buildDir
