@@ -27,6 +27,18 @@ public class TcpSocketBuilder internal constructor(
     ): Socket = connect(InetSocketAddress(hostname, port), configure)
 
     /**
+     * Connect to [hostname] and [port].
+     *
+     * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.network.sockets.TcpSocketBuilder.connect)
+     */
+    public suspend fun connectWithConfiguration(
+        hostname: String,
+        port: Int,
+        configure: SocketOptions.TCPClientSocketOptions.() -> Unit = {},
+        onBeforeConnect: suspend (Socket) -> Unit = {},
+    ): Socket = connectWithConfiguration(InetSocketAddress(hostname, port), configure, onBeforeConnect)
+
+    /**
      * Bind server socket at [port] to listen to [hostname].
      *
      * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.network.sockets.TcpSocketBuilder.bind)
@@ -46,6 +58,17 @@ public class TcpSocketBuilder internal constructor(
         remoteAddress: SocketAddress,
         configure: SocketOptions.TCPClientSocketOptions.() -> Unit = {}
     ): Socket = tcpConnect(selector, remoteAddress, options.tcpConnect().apply(configure))
+
+    /**
+     * Connect to [remoteAddress].
+     *
+     * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.network.sockets.TcpSocketBuilder.connect)
+     */
+    public suspend fun connectWithConfiguration(
+        remoteAddress: SocketAddress,
+        configure: SocketOptions.TCPClientSocketOptions.() -> Unit = {},
+        onBeforeConnect: suspend (Socket) -> Unit = {},
+    ): Socket = tcpConnectWithConfiguration(selector, remoteAddress, options.tcpConnect().apply(configure), onBeforeConnect)
 
     /**
      * Bind server socket to listen to [localAddress].
