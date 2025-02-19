@@ -22,6 +22,21 @@ internal actual suspend fun tcpConnect(
     }
 }
 
+internal actual suspend fun tcpConnectWithConfiguration(
+    selector: SelectorManager,
+    remoteAddress: SocketAddress,
+    socketOptions: SocketOptions.TCPClientSocketOptions,
+    onBeforeConnect: suspend (Socket) -> Unit,
+): Socket = selector.buildOrClose({ openSocketChannelFor(remoteAddress) }) {
+    if (remoteAddress is InetSocketAddress) assignOptions(socketOptions)
+    nonBlocking()
+
+    SocketImpl(this, selector, socketOptions).apply {
+        onBeforeConnect(this)
+        connect(remoteAddress.toJavaAddress())
+    }
+}
+
 internal actual suspend fun tcpBind(
     selector: SelectorManager,
     localAddress: SocketAddress?,
