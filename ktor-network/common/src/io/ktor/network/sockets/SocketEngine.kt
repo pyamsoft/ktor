@@ -12,6 +12,13 @@ internal expect suspend fun tcpConnect(
     socketOptions: SocketOptions.TCPClientSocketOptions
 ): Socket
 
+internal expect suspend fun tcpConnectWithConfiguration(
+    selector: SelectorManager,
+    remoteAddress: SocketAddress,
+    socketOptions: SocketOptions.TCPClientSocketOptions,
+    onBeforeConnect: suspend (Socket) -> Unit = {},
+): Socket
+
 internal expect suspend fun tcpBind(
     selector: SelectorManager,
     localAddress: SocketAddress?,
