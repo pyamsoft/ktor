@@ -18,5 +18,5 @@ dependencies {
 
 // Should be synced with gradle/gradle-daemon-jvm.properties
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(17)
 }
