@@ -44,3 +44,6 @@ gradle-user-home
 scan-journal.log
 
 **/.claude/settings.local.json
+
+# Exclude buildDir outputs
+*buildDir
