@@ -8,6 +8,13 @@ import io.ktor.network.selector.*
 import io.ktor.network.sockets.nodejs.*
 import kotlinx.coroutines.*
 
+internal actual suspend fun tcpConnectWithConfiguration(
+    selector: SelectorManager,
+    remoteAddress: SocketAddress,
+    socketOptions: SocketOptions.TCPClientSocketOptions,
+    onBeforeConnect: suspend (Socket) -> Unit,
+): Socket = tcpConnect(selector, remoteAddress, socketOptions)
+
 internal actual suspend fun tcpConnect(
     selector: SelectorManager,
     remoteAddress: SocketAddress,
