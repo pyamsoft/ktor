@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import org.jetbrains.kotlin.konan.target.HostManager
 
 extra["globalM2"] = "${project.file("build")}/m2"
-extra["publishLocal"] = project.hasProperty("publishLocal")
+extra["publishLocal"] = true
 
 apply(from = "gradle/verifier.gradle")
 
