@@ -26,6 +26,17 @@ public class UDPSocketBuilder internal constructor(
     ): BoundDatagramSocket = udpBind(selector, localAddress, options.udp().apply(configure))
 
     /**
+     * Bind server socket to listen to [localAddress].
+     *
+     * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.network.sockets.UDPSocketBuilder.bind)
+     */
+    public suspend fun bindWithConfiguration(
+        localAddress: SocketAddress? = null,
+        configure: SocketOptions.UDPSocketOptions.() -> Unit = {},
+        onBeforeBind: suspend (Any) -> Unit,
+    ): BoundDatagramSocket = udpBindWithConfiguration(selector, localAddress, options.udp().apply(configure), onBeforeBind)
+
+    /**
      * Bind server socket at [port] to listen to [hostname].
      *
      * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.network.sockets.UDPSocketBuilder.bind)
@@ -35,6 +46,18 @@ public class UDPSocketBuilder internal constructor(
         port: Int = 0,
         configure: SocketOptions.UDPSocketOptions.() -> Unit = {}
     ): BoundDatagramSocket = bind(InetSocketAddress(hostname, port), configure)
+
+    /**
+     * Bind server socket at [port] to listen to [hostname].
+     *
+     * [Report a problem](https://ktor.io/feedback/?fqname=io.ktor.network.sockets.UDPSocketBuilder.bind)
+     */
+    public suspend fun bindWithConfiguration(
+        hostname: String = "0.0.0.0",
+        port: Int = 0,
+        configure: SocketOptions.UDPSocketOptions.() -> Unit = {},
+        onBeforeBind: suspend (Any) -> Unit,
+    ): BoundDatagramSocket = bindWithConfiguration(InetSocketAddress(hostname, port), configure, onBeforeBind)
 
     /**
      * Create a datagram socket to listen datagrams at [localAddress] and set to [remoteAddress].
