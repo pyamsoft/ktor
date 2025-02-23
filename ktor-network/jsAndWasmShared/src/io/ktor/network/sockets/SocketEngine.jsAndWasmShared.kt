@@ -45,3 +45,10 @@ internal actual suspend fun udpBind(
     localAddress: SocketAddress?,
     options: SocketOptions.UDPSocketOptions
 ): BoundDatagramSocket = error("UDP sockets are unsupported on WASM/JS")
+
+internal actual suspend fun udpBindWithConfiguration(
+    selector: SelectorManager,
+    localAddress: SocketAddress?,
+    options: SocketOptions.UDPSocketOptions,
+    onBeforeBind: suspend (Any) -> Unit,
+): BoundDatagramSocket = error("UDP sockets are unsupported on WASM/JS")
