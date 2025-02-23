@@ -40,3 +40,22 @@ internal actual suspend fun udpBind(
     }
     return DatagramSocketImpl(this, selector)
 }
+
+internal actual suspend fun udpBindWithConfiguration(
+    selector: SelectorManager,
+    localAddress: SocketAddress?,
+    options: SocketOptions.UDPSocketOptions,
+    onBeforeBind: suspend (Any) -> Unit,
+): BoundDatagramSocket = selector.buildOrClose({ openDatagramChannel() }) {
+    assignOptions(options)
+    nonBlocking()
+
+    onBeforeBind(socket())
+
+    if (java7NetworkApisAvailable) {
+        bind(localAddress?.toJavaAddress())
+    } else {
+        socket().bind(localAddress?.toJavaAddress())
+    }
+    return DatagramSocketImpl(this, selector)
+}
