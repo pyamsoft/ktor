@@ -37,3 +37,10 @@ internal expect suspend fun udpBind(
     localAddress: SocketAddress?,
     options: SocketOptions.UDPSocketOptions
 ): BoundDatagramSocket
+
+internal expect suspend fun udpBindWithConfiguration(
+    selector: SelectorManager,
+    localAddress: SocketAddress?,
+    options: SocketOptions.UDPSocketOptions,
+    onBeforeBind: suspend (Any) -> Unit,
+): BoundDatagramSocket
