@@ -71,3 +71,11 @@ internal actual suspend fun udpBind(
         )
     }
 }
+
+@OptIn(ExperimentalForeignApi::class)
+internal actual suspend fun udpBindWithConfiguration(
+    selector: SelectorManager,
+    localAddress: SocketAddress?,
+    options: SocketOptions.UDPSocketOptions,
+    onBeforeBind: suspend (Any) -> Unit,
+): BoundDatagramSocket = udpBind(selector, localAddress, options)
